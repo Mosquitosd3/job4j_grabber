@@ -11,6 +11,22 @@ import java.util.StringJoiner;
 
 
 public class SqlRuDateTimeParser implements DateTimeParser {
+    private static final Map<String, String> MONTHS = new HashMap<>() {
+        {
+            put("янв", "Jan");
+            put("фев", "Feb");
+            put("мар", "Mar");
+            put("апр", "Apr");
+            put("май", "May");
+            put("июн", "Jun");
+            put("июл", "Jul");
+            put("авг", "Aug");
+            put("сен", "Sep");
+            put("окт", "Oct");
+            put("ноя", "Nov");
+            put("дек", "Dec");
+        }
+    };
 
     @Override
     public LocalDateTime parse(String parse) {
@@ -26,7 +42,7 @@ public class SqlRuDateTimeParser implements DateTimeParser {
         StringJoiner joiner = new StringJoiner(" ");
         String[] date = text[0].split(" ");
         String day = date[0];
-        String month = getMonths(date[1]);
+        String month = MONTHS.get(date[1]);
         String year = date[2];
         String dateText = joiner.add(day).add(month).add(year).toString();
         return LocalDateTime.of(LocalDate.parse(dateText, dateFormatter), LocalTime.parse(timeText, timeFormatter));
@@ -38,23 +54,5 @@ public class SqlRuDateTimeParser implements DateTimeParser {
 
     private LocalDateTime getYesterday(String time, DateTimeFormatter formatter) {
         return LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.parse(time, formatter));
-    }
-
-
-    private String getMonths(String month) {
-        Map<String, String> map = new HashMap<>();
-        map.put("янв", "Jan");
-        map.put("фев", "Feb");
-        map.put("мар", "Mar");
-        map.put("апр", "Apr");
-        map.put("май", "May");
-        map.put("июн", "Jun");
-        map.put("июл", "Jul");
-        map.put("авг", "Aug");
-        map.put("сен", "Sep");
-        map.put("окт", "Oct");
-        map.put("ноя", "Nov");
-        map.put("дек", "Dec");
-        return map.get(month);
     }
 }
