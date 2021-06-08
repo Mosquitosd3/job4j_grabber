@@ -14,8 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlRuParse implements Parse {
+    DateTimeParser parserDate;
+
+    public SqlRuParse(DateTimeParser parserDate) {
+        this.parserDate = parserDate;
+    }
+
     public static void main(String[] args) throws Exception {
-        SqlRuParse sql = new SqlRuParse();
+        SqlRuParse sql = new SqlRuParse(new SqlRuDateTimeParser());
         String urlPages = "https://www.sql.ru/forum/job-offers/";
         List<Post> posts = null;
         for (int i = 1; i < 6; i++) {
@@ -47,7 +53,6 @@ public class SqlRuParse implements Parse {
 
     @Override
     public Post detail(String url) {
-        DateTimeParser parserDate = new SqlRuDateTimeParser();
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
